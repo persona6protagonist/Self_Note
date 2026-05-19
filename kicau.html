@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Self Note</title>
+        <link rel="stylesheet" href="style_kicau.css">
+    </head>
+    <body>
+        <div class="container">
+                <h1>Keuangan Pribadi</h1>
+                <div class="summary">
+                    <div class="card-summary">
+                        <p class="label">Saldo</p> 
+                        <p class="value" id="saldo"> Rp.0</p>
+                    </div>
+                    <div class="card-summary">
+                        <p class="label">Pemasukan</p>
+                        <p class="value income" id="total-masuk">Rp.0</p>
+                    </div>
+                    <div class="card-summary">
+                        <p class="label">Pengeluaran</p>
+                        <p class="value expense" id="total-keluar">Rp.0</p>
+                    </div>
+                </div>
+
+            <div class="card">
+                <h2>Tambah Transaksi</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <input type="text" id="keterangan" placeholder="contoh: Gaji, Makan Siang, DLL">
+                    </div>
+                    <div class="form-group">
+                        <label for="jumlah">Jumlah (Rp)</label>
+                        <input type="number" id="jumlah" placeholder="1000">
+                    </div>
+                </div>
+            
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="jenis">Jenis</label>
+                        <select id="jenis">
+                        <option value="masuk">Pemasukan</option>
+                        <option value="keluar">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal</label>
+                        <input type="date" id="tanggal">
+                    </div>
+                </div>
+                <button onclick="tambahTransaksi()">+ Tambah Transaksi</button>
+            </div>
+
+            <div class="card">
+                <h2>Riwayat Transaksi</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Keterangan</th>
+                            <th>Jenis</th>
+                            <th>Jumlah</th>
+                            <th>Hapus</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-transaksi">
+                        <!--jscript-->
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script src="script_kicau.js"></script>
+    </body>
+</html>    

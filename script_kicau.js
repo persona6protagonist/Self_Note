@@ -1,8 +1,27 @@
-let transaksi =[];
+let transaksi = JSON.parse(localStorage.getItem('transaksi')) || [];
+
+tampilkanTransaksi();
+hitungSaldo();
+
+document.getElementById('jumlah').addEventListener('input', function() {
+    // Simpan posisi kursor
+    let nilai = this.value.replace(/[^0-9]/g, ''); // hanya ambil angka murni
+    
+    if (nilai === '') {
+        this.value = '';
+        return;
+    }
+
+    this.value = formatRupiah(Number(nilai));
+});
+
+function formatRupiah(angka) {
+  return angka.toLocaleString('id-ID');
+}
 
 function tambahTransaksi() {
     const keterangan = document.getElementById('keterangan').value;
-    const jumlah = Number(document.getElementById('jumlah').value);
+    const jumlah = Number(document.getElementById('jumlah').value.replace(/[^0-9]/g, ''));
     const jenis = document.getElementById('jenis').value;
     const tanggal = document.getElementById('tanggal').value;
 
@@ -20,10 +39,14 @@ function tambahTransaksi() {
     };
 
     transaksi.push(data);
-
+    simpanKeStorage();
     tampilkanTransaksi();
     hitungSaldo();
     bersihkanForm();
+}
+
+function simpanKeStorage(){
+  localStorage.setItem('transaksi',JSON.stringify(transaksi));
 }
 
 function tampilkanTransaksi(){
@@ -77,6 +100,7 @@ function hapusTransaksi(id) {
     return item.id !== id;
   });
 
+  simpanKeStorage();
   tampilkanTransaksi();
   hitungSaldo();
 }

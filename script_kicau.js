@@ -1,7 +1,9 @@
 let transaksi = JSON.parse(localStorage.getItem('transaksi')) || [];
+let grafik = null;
 
 tampilkanTransaksi();
 hitungSaldo();
+tampilkanGrafik();
 
 document.getElementById('jumlah').addEventListener('input', function() {
     // Simpan posisi kursor
@@ -42,6 +44,7 @@ function tambahTransaksi() {
     simpanKeStorage();
     tampilkanTransaksi();
     hitungSaldo();
+    tampilkanGrafik();
     bersihkanForm();
 }
 
@@ -103,6 +106,63 @@ function hapusTransaksi(id) {
   simpanKeStorage();
   tampilkanTransaksi();
   hitungSaldo();
+  tampilkanGrafik();
+}
+
+
+
+function tampilkanGrafik(){
+  const bulanan = {};
+
+  transaksi.forEach(function(item){
+    const bulan = item.tanggal.slice(0, 7);
+
+    if (!bulanan[bulan]){
+      bulanan[bulan] = { masuk: 0, keluar: 0};
+    }
+
+    if (item.jenis === 'masuk'){
+      bulanan[bulan].masuk += item.jumlah;
+    }else {
+      bulanan[bulan].keluar += item.jumlah;
+    }
+  });
+
+
+const labels = Object.keys(bulanan).sort();
+const dataMasuk = labels.map(b => bulanan[b].masuk);
+const dataKeluar = labels.map(b => bulanan[b].keluar);
+
+const ctx = document.getElementById('grafikKeuangan').getContext('2d');
+
+if (grafik) grafik.destroy();
+
+grafik = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Pemasukan',
+        data: dataMasuk,
+        backgroundColor: '#1D9E75'
+      },
+      {
+        label: 'Pengeluaran',
+        data: dataKeluar,
+        backgroundColor: '#D85A30'
+      }
+    ]
+  },
+  options:{
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
 }
 
 function bersihkanForm() {

@@ -170,3 +170,26 @@ function bersihkanForm() {
   document.getElementById('jumlah').value = '';
   document.getElementById('tanggal').value = '';
 }
+
+function eksportCSV(){
+  if (transaksi.length === 0){
+    alert('Data Masih Kosong');
+    return;
+  }
+
+  let csv = 'Tanggal,Keterangan,Jenis,Jumlah\n';
+
+  transaksi.forEach(function(item){
+    const jenis = item.jenis === 'masuk' ? 'Pemasukan' : 'Pengeluaran';
+    csv += `"\t${item.tanggal}",${item.keterangan},${jenis},${item.jumlah}\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'transaksi.csv';
+  a.click();
+
+  URL.revokeObjectURL(url);
+}

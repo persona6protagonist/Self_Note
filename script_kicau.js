@@ -1,9 +1,7 @@
-let transaksi = JSON.parse(localStorage.getItem('transaksi')) || [];
+const API = 'http://localhost:3000';
+let transaksi = [];
 let grafik = null;
-
-tampilkanTransaksi();
-hitungSaldo();
-tampilkanGrafik();
+ambilTransaksi();
 
 document.getElementById('jumlah').addEventListener('input', function() {
     // Simpan posisi kursor
@@ -32,20 +30,17 @@ function tambahTransaksi() {
         return;
     }
 
-    const data = {
-        id: Date.now(),
-        keterangan,
-        jumlah,
-        jenis,
-        tanggal
-    };
-
-    transaksi.push(data);
-    simpanKeStorage();
-    tampilkanTransaksi();
-    hitungSaldo();
-    tampilkanGrafik();
-    bersihkanForm();
+    fetch(API + '/transaksi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keterangan, jenis, jumlah, tanggal })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      console.log(data);
+      ambilTransaksi();
+      bersihkanForm();
+    });
 }
 
 function simpanKeStorage(){
@@ -59,7 +54,7 @@ function tampilkanTransaksi(){
     transaksi.forEach(function(item){
         const row = document.createElement('tr');
         row.innerHTML = `
-        <td>${item.tanggal}</td>
+        <td>${formatTanggal(item.tanggal)}</td>
         <td>${item.keterangan}</td>
         <td>
             <span class="badge ${item.jenis === 'masuk' ? 'badge-in' : 'badge-out'} ">
@@ -84,9 +79,9 @@ function hitungSaldo() {
 
   transaksi.forEach(function(item) {
     if (item.jenis === 'masuk') {
-      totalMasuk += item.jumlah;
+      totalMasuk += Number(item.jumlah);
     } else {
-      totalKeluar += item.jumlah;
+      totalKeluar += Number(item.jumlah);
     }
   });
 
@@ -99,14 +94,13 @@ function hitungSaldo() {
 
 function hapusTransaksi(id) {
   // Filter: simpan semua kecuali yang id-nya sama
-  transaksi = transaksi.filter(function(item) {
-    return item.id !== id;
+      fetch(API + '/transaksi/' + id, {
+        method: 'DELETE'
+    })
+    .then(function(res) { return res.json(); })
+    .then(function() {
+        ambilTransaksi();
   });
-
-  simpanKeStorage();
-  tampilkanTransaksi();
-  hitungSaldo();
-  tampilkanGrafik();
 }
 
 
@@ -192,4 +186,18 @@ function eksportCSV(){
   a.click();
 
   URL.revokeObjectURL(url);
+}
+function ambilTransaksi() {
+    fetch(API + '/transaksi')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        transaksi = data;
+        tampilkanTransaksi();
+        hitungSaldo();
+        tampilkanGrafik();
+    });
+}
+
+function formatTanggal(tanggal) {
+    return new Date(tanggal).toISOString().slice(0, 10);
 }

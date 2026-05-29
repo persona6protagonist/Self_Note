@@ -1,4 +1,9 @@
 const API = 'http://localhost:3000';
+
+function getToken() {
+  return localStorage.getItem('token');
+}
+
 let transaksi = [];
 let grafik = null;
 ambilTransaksi();
@@ -32,7 +37,9 @@ function tambahTransaksi() {
 
     fetch(API + '/transaksi', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json',
+        'authorization': getToken()
+       },
       body: JSON.stringify({ keterangan, jenis, jumlah, tanggal })
     })
     .then(function(res) { return res.json(); })
@@ -95,7 +102,8 @@ function hitungSaldo() {
 function hapusTransaksi(id) {
   // Filter: simpan semua kecuali yang id-nya sama
       fetch(API + '/transaksi/' + id, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { 'authorization': getToken() }
     })
     .then(function(res) { return res.json(); })
     .then(function() {
@@ -188,9 +196,15 @@ function eksportCSV(){
   URL.revokeObjectURL(url);
 }
 function ambilTransaksi() {
-    fetch(API + '/transaksi')
+    fetch(API + '/transaksi', {
+      headers: {'authorization': getToken() }
+    })
     .then(function(res) { return res.json(); })
     .then(function(data) {
+      if (data.error) {
+        window.location.href = 'kicau_login.html';
+        return;
+      }
         transaksi = data;
         tampilkanTransaksi();
         hitungSaldo();

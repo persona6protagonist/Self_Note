@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="style_kicau.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+            <button onclick="login()">Login</button>
+            <p>Belum punya akun? <a href="kicau_register.html">Register</a></p>
+        </div>
+    </div>
+    <script>
+        const API = 'http://localhost:3000';
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert('Harap isi semua kolom');
+                return;
+            }
+
+            fetch(API + '/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password})
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                localStorage.setItem('token', data.token);
+
+                window.location.href = 'kicau.html'
+            });
+
+        }
+    </script>
+</body>
+
+</html>

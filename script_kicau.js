@@ -1,3 +1,4 @@
+document.getElementById('tampil-username').textContent = 'Halo, ' + localStorage.getItem('username');
 const API = 'http://localhost:3000';
 
 function getToken() {

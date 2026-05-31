@@ -216,3 +216,8 @@ function ambilTransaksi() {
 function formatTanggal(tanggal) {
     return new Date(tanggal).toISOString().slice(0, 10);
 }
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  window.location.href = 'kicau_login.html';
+}

@@ -49,6 +49,13 @@
                 window.location.href = 'kicau_login.html';
             })
         }
+
+         document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                register();
+            }
+        });
+
     </script>
 </body>
 </html>

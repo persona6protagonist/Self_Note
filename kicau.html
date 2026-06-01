@@ -58,6 +58,12 @@
                 <button onclick="tambahTransaksi()">+ Tambah Transaksi</button>
             </div>
 
+            <div class="filter-bar">
+                <select id="filter-bulan" onchange="filterBulan()">
+                    <option value="semua">Semua Bulan</option>
+                </select>
+            </div>
+
             <div class="card">
                 <h2>Riwayat Transaksi</h2>
                 <button onclick="eksportCSV()">Eksport CSV</button>

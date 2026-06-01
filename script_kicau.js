@@ -56,11 +56,11 @@ function simpanKeStorage(){
   localStorage.setItem('transaksi',JSON.stringify(transaksi));
 }
 
-function tampilkanTransaksi(){
+function tampilkanTransaksi(data = transaksi){
     const tbody = document.getElementById('tabel-transaksi');
     tbody.innerHTML='';
 
-    transaksi.forEach(function(item){
+    data.forEach(function(item){
         const row = document.createElement('tr');
         row.innerHTML = `
         <td>${formatTanggal(item.tanggal)}</td>
@@ -210,6 +210,7 @@ function ambilTransaksi() {
         tampilkanTransaksi();
         hitungSaldo();
         tampilkanGrafik();
+        isiFilterBulan();
     });
 }
 function formatTanggal(tanggal) {
@@ -219,4 +220,29 @@ function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('username');
   window.location.href = 'kicau_login.html';
+}
+
+function isiFilterBulan() {
+  const select = document.getElementById('filter-bulan');
+  const bulanADA = [...new Set(transaksi.map(item => item.tanggal.slice(0, 7)))].sort();
+
+
+  select.innerHTML = 'option value=semua>Semua Bulan</option>';
+
+  bulanADA.forEach(function(bulan) {
+    const option = document.createElement('option');
+    option.value = bulan;
+    option.textContent = bulan;
+    select.appendChild(option);
+  });
+}
+
+function filterBulan() {
+  const bulan = document.getElementById('filter-bulan').value;
+  if (bulan === 'semua') {
+    tampilkanTransaksi(transaksi);
+  } else {
+    const hasil = transaksi.filter(item => item.tanggal.slice(0, 7) == bulan);
+    tampilkanTransaksi(hasil);
+  }
 }

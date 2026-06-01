@@ -115,10 +115,10 @@ function hapusTransaksi(id) {
 
 
 
-function tampilkanGrafik(){
+function tampilkanGrafik(data = transaksi){
   const bulanan = {};
 
-  transaksi.forEach(function(item){
+  data.forEach(function(item){
     const bulan = item.tanggal.slice(0, 7);
 
     if (!bulanan[bulan]){
@@ -227,7 +227,7 @@ function isiFilterBulan() {
   const bulanADA = [...new Set(transaksi.map(item => item.tanggal.slice(0, 7)))].sort();
 
 
-  select.innerHTML = 'option value=semua>Semua Bulan</option>';
+  select.innerHTML = '<option value=semua>Semua Bulan</option>';
 
   bulanADA.forEach(function(bulan) {
     const option = document.createElement('option');
@@ -241,8 +241,10 @@ function filterBulan() {
   const bulan = document.getElementById('filter-bulan').value;
   if (bulan === 'semua') {
     tampilkanTransaksi(transaksi);
+    tampilkanGrafik(transaksi);
   } else {
     const hasil = transaksi.filter(item => item.tanggal.slice(0, 7) == bulan);
     tampilkanTransaksi(hasil);
+    tampilkanGrafik(hasil);
   }
 }

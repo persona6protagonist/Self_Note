@@ -145,4 +145,6 @@ td {
     background: #FAECE7;
     color: #993C1D;
 }
-
+#grafikKeuangan {
+    min-height: 300px;
+}

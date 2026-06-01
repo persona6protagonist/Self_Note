@@ -8,6 +8,7 @@ function getToken() {
 let transaksi = [];
 let grafik = null;
 ambilTransaksi();
+document.getElementById('tanggal').value = new Date().toLocaleDateString('en-CA');
 
 document.getElementById('jumlah').addEventListener('input', function() {
     // Simpan posisi kursor
@@ -125,12 +126,11 @@ function tampilkanGrafik(){
     }
 
     if (item.jenis === 'masuk'){
-      bulanan[bulan].masuk += item.jumlah;
+      bulanan[bulan].masuk += Number(item.jumlah);
     }else {
-      bulanan[bulan].keluar += item.jumlah;
+      bulanan[bulan].keluar += Number(item.jumlah);
     }
   });
-
 
 const labels = Object.keys(bulanan).sort();
 const dataMasuk = labels.map(b => bulanan[b].masuk);
@@ -171,7 +171,7 @@ grafik = new Chart(ctx, {
 function bersihkanForm() {
   document.getElementById('keterangan').value = '';
   document.getElementById('jumlah').value = '';
-  document.getElementById('tanggal').value = '';
+  document.getElementById('tanggal').value = new Date().toLocaleDateString('en-CA');
 }
 
 function eksportCSV(){
@@ -212,9 +212,8 @@ function ambilTransaksi() {
         tampilkanGrafik();
     });
 }
-
 function formatTanggal(tanggal) {
-    return new Date(tanggal).toISOString().slice(0, 10);
+    return tanggal.slice(0, 10);
 }
 function logout() {
   localStorage.removeItem('token');

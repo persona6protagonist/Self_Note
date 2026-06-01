@@ -60,6 +60,11 @@ function tampilkanTransaksi(data = transaksi){
     const tbody = document.getElementById('tabel-transaksi');
     tbody.innerHTML='';
 
+    if(data.length == 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#888;">Belum ada transaksi</td></tr>'
+      return;
+    }
+
     data.forEach(function(item){
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -103,6 +108,8 @@ function hitungSaldo() {
 
 function hapusTransaksi(id) {
   // Filter: simpan semua kecuali yang id-nya sama
+  if (!confirm('Yakin Hapus?')) return;
+
       fetch(API + '/transaksi/' + id, {
         method: 'DELETE',
         headers: { 'authorization': getToken() }
@@ -131,6 +138,14 @@ function tampilkanGrafik(data = transaksi){
       bulanan[bulan].keluar += Number(item.jumlah);
     }
   });
+
+  if (Object.keys(bulanan).length === 0) {
+    if (grafik) grafik.destroy();
+    grafik = null;
+    document.getElementById('card-grafik').style.display = 'none';
+    return;
+  }
+document.getElementById('card-grafik').style.display = 'block';
 
 const labels = Object.keys(bulanan).sort();
 const dataMasuk = labels.map(b => bulanan[b].masuk);
@@ -232,9 +247,19 @@ function isiFilterBulan() {
   bulanADA.forEach(function(bulan) {
     const option = document.createElement('option');
     option.value = bulan;
-    option.textContent = bulan;
+    option.textContent = formatNamaBulan(bulan);
     select.appendChild(option);
   });
+}
+
+function formatNamaBulan(bulan) {
+  const [tahun, bln] = bulan.split('-');
+  const namaBulan = [
+    'Januari', 'Februari', 'Maret', 'April',
+    'Mei', 'Juni', 'Juli', 'Agustus',
+    'September', 'Oktober', 'November', 'Desember'
+  ];
+  return namaBulan[Number(bln) - 1] + ' ' + tahun;
 }
 
 function filterBulan() {

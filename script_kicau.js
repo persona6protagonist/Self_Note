@@ -57,6 +57,7 @@ function simpanKeStorage(){
 }
 
 function tampilkanTransaksi(data = transaksi){
+    transaksiTampil = data;
     const tbody = document.getElementById('tabel-transaksi');
     tbody.innerHTML='';
 
@@ -197,7 +198,7 @@ function eksportCSV(){
 
   let csv = 'Tanggal,Keterangan,Jenis,Jumlah\n';
 
-  transaksi.forEach(function(item){
+  transaksiTampil.forEach(function(item){
     const jenis = item.jenis === 'masuk' ? 'Pemasukan' : 'Pengeluaran';
     csv += `"\t${item.tanggal}",${item.keterangan},${jenis},${item.jumlah}\n`;
   });

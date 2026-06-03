@@ -1,5 +1,5 @@
 document.getElementById('tampil-username').textContent = 'Halo, ' + localStorage.getItem('username');
-const API = 'http://localhost:3000';
+const API = 'https://belajarnodejs-production.up.railway.app';
 
 function getToken() {
   return localStorage.getItem('token');

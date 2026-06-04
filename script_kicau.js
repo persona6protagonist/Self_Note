@@ -207,7 +207,9 @@ function eksportCSV(){
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'transaksi.csv';
+  const filterBulan = document.getElementById('filter-bulan').value;
+  const namaFile = filterBulan === 'semua' ? 'transaksi-semua' : 'transaksi-' + filterBulan;
+  a.download = namaFile + '.csv';
   a.click();
 
   URL.revokeObjectURL(url);
